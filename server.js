@@ -43,7 +43,7 @@ sequelize.sync().then(() => console.log("Tables have been created or updated."))
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 // Simple API for testing
-app.get('/api', (req, res) => res.send('Hello Toucan Nest Backend API!'));
+app.get('/api', (req, res) => res.send('Hello Toucan Nest Backend API! a wybrana baza danych to: ' + process.env.DB_NAME)); 
 
 // SPA routing for handling React Router
 app.get('*', (req, res) => {

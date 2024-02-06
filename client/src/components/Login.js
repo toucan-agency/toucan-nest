@@ -15,7 +15,12 @@ function Login() {
       await login(email, password);
       navigate('/');
     } catch (err) {
-      setError('Failed to log in'); // Obsługa błędów logowania
+      // Rozszerzona obsługa błędów
+      if (err.code === '401') {
+        setError('Nie znaleziono użytkownika');
+      } else {
+        setError('Wystąpił błąd podczas logowania');
+      }
     }
   };
 

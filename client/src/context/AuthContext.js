@@ -29,7 +29,8 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('role', data.role); // Zapis roli
       setCurrentUser({ email, role: data.role });
     } else {
-      throw new Error('Logowanie nieudane');
+      throw new Error(data.message);
+      console.log(data.message);
     }
   };
 
