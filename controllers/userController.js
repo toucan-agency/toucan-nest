@@ -12,8 +12,7 @@ exports.getUsers = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = await User.create({ ...req.body, password: hashedPassword });
+    const user = await User.create(req.body);
     res.status(201).json(user);
   } catch (error) {
     res.status(400).send(error.message);

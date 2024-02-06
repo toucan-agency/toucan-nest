@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/'); // Przekierowanie do Dashboard
+      navigate('/');
     } catch (err) {
       setError('Failed to log in'); // Obsługa błędów logowania
     }

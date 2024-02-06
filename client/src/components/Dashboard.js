@@ -12,6 +12,7 @@ function Dashboard() {
     <div>
       <h2>Dashboard</h2>
       <p>Email: {currentUser.email}</p>
+      <p>Uprawnienia: {currentUser.role}</p>
       <button onClick={handleLogout}>Wyloguj się</button>
     </div>
   );
