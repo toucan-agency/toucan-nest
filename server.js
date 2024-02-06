@@ -1,10 +1,28 @@
 // Express.js server run & config
 const express = require('express');
 const path = require('path');
+require('dotenv').config();
 const app = express();
+
+// Middleware JSON parse
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Import database settings config
 const sequelize = require('./config/database');
+
+// Import routers
+const clientRoutes = require('./routes/clientRoutes');
+const userRoutes = require('./routes/userRoutes');
+const serviceRoutes = require('./routes/serviceRoutes');
+const clientServiceRoutes = require('./routes/clientServiceRoutes');
+const authRoutes = require('./routes/authRoutes');
+
+app.use('/api/clients', clientRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/client-services', clientServiceRoutes);
+app.use('/api', authRoutes); // Użyj routerów autentykacji
 
 // Test SQL connection
 sequelize.authenticate()
@@ -13,35 +31,19 @@ sequelize.authenticate()
 
 // Import Sequelize models
 const User = require('./models/user');
-const Client = require('./models/client'); // Import new Client model
-const Service = require('./models/service'); // Import new Service model
-const ClientService = require('./models/clientservice'); // Import new ClientService model
+const Client = require('./models/client');
+const Service = require('./models/service');
+const ClientService = require('./models/clientservice');
 
 // Sequelize models synchronization  
 sequelize.sync().then(() => console.log("Tables have been created or updated."))
   .catch(err => console.error('Failed to synchronize database tables:', err));
-
-// Middleware JSON parse
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // Path to React static files
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 // Simple API for testing
 app.get('/api', (req, res) => res.send('Hello Toucan Nest Backend API!'));
-
-// API Endpoints for handling CRUD operations might go here
-// Example for creating a new client (implement the actual logic as needed)
-app.post('/api/clients', async (req, res) => {
-  try {
-    const client = await Client.create(req.body);
-    res.status(201).send(client);
-  } catch (error) {
-    console.error('Failed to create a client:', error);
-    res.status(400).send({ error: 'Failed to create a client' });
-  }
-});
 
 // SPA routing for handling React Router
 app.get('*', (req, res) => {

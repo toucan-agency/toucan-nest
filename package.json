@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "start:prod": "npm --prefix client run build && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

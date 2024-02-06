@@ -1,24 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import { useAuth } from './context/AuthContext';
 
 function App() {
+  const { currentUser } = useAuth(); // Zakładając, że useAuth zwraca aktualnego użytkownika
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React with PS
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route 
+          path="/" 
+          element={currentUser ? <Dashboard /> : <Navigate to="/login" />} 
+        />
+        {/* Możesz dodać więcej chronionych tras w podobny sposób */}
+      </Routes>
+    </Router>
   );
 }
 
