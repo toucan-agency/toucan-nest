@@ -1,4 +1,4 @@
-// Express.js server run & config
+// Express.js server run & config 
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 // Import database settings config
 const sequelize = require('./config/database');
 
-// Import routers
+// Import routers 
 const clientRoutes = require('./routes/clientRoutes');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
@@ -21,7 +21,7 @@ const authRoutes = require('./routes/authRoutes');
 app.use('/api/clients', clientRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/services', serviceRoutes);
-app.use('/api/client-services', clientServiceRoutes);
+app.use('/api/clientservices', clientServiceRoutes);
 app.use('/api', authRoutes); // Użyj routerów autentykacji
 
 // Test SQL connection
@@ -36,7 +36,10 @@ const Service = require('./models/service');
 const ClientService = require('./models/clientservice');
 
 // Sequelize models synchronization  
-sequelize.sync().then(() => console.log("Tables have been created or updated."))
+sequelize.sync(
+  // { alter: true } // Użyj tego parametru, aby nie tracić danych
+)
+  .then(() => console.log("Tables have been created or updated."))
   .catch(err => console.error('Failed to synchronize database tables:', err));
 
 // Path to React static files

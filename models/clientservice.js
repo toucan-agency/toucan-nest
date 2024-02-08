@@ -25,9 +25,14 @@ ClientService.init({
       key: 'serviceID'
     }
   },
+  apiAccountID: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   startDate: {
     type: DataTypes.DATEONLY,
-    allowNull: false
+    allowNull: false,
+    defaultValue: DataTypes.NOW
   },
   status: {
     type: DataTypes.STRING,
@@ -42,5 +47,10 @@ ClientService.init({
   sequelize,
   modelName: 'ClientService'
 });
+
+Client.hasMany(ClientService, { foreignKey: 'clientID' });
+Service.hasMany(ClientService, { foreignKey: 'serviceID' });
+ClientService.belongsTo(Client, { foreignKey: 'clientID' });
+ClientService.belongsTo(Service, { foreignKey: 'serviceID' });
 
 module.exports = ClientService;

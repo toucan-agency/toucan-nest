@@ -24,3 +24,5 @@ yarn-error.log*
 docs
 
 createAdminUser.js
+
+build

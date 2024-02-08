@@ -17,3 +17,15 @@ exports.createService = async (req, res) => {
     res.status(400).send(error.message);
   }
 };
+
+exports.deleteService = async (req, res) => {
+  const serviceId = req.params.id; // ID usługi z parametrów żądania
+  const service = await Service.findByPk(serviceId);
+
+  if (!service) {
+    return res.status(404).send({ message: 'Nie znaleziono usługi' });
+  }
+
+  await service.destroy();
+  res.send({ message: 'Usługa została usunięta' });
+};
