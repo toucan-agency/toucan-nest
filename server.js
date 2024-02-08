@@ -17,11 +17,13 @@ const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const clientServiceRoutes = require('./routes/clientServiceRoutes');
 const authRoutes = require('./routes/authRoutes');
+const metaAPIRoutes = require('./routes/metaAPIRoutes');
 
 app.use('/api/clients', clientRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/clientservices', clientServiceRoutes);
+app.use('/api/meta_api', metaAPIRoutes);
 app.use('/api', authRoutes); // Użyj routerów autentykacji
 
 // Test SQL connection
@@ -37,7 +39,7 @@ const ClientService = require('./models/clientservice');
 
 // Sequelize models synchronization  
 sequelize.sync(
-  // { alter: true } // Użyj tego parametru, aby nie tracić danych
+   //{ alter: true } // Użyj tego parametru, aby nie tracić danych
 )
   .then(() => console.log("Tables have been created or updated."))
   .catch(err => console.error('Failed to synchronize database tables:', err));

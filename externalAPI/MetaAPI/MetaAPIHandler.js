@@ -5,6 +5,7 @@ require('dotenv').config();
 const graphAPIUrl = `${process.env.GRAPH_API_URL}/${process.env.GRAPH_API_VERSION}`;
 const token = process.env.META_API_TOKEN;
 const busAssetID = process.env.META_BUSSINESS_ASSET_GROUP_ID;
+const bmID = process.env.META_BUSINESS_MANAGER_ID;
 
 exports.checkToken = async () => {
   const checkTokenUrl = `${graphAPIUrl}/debug_token?input_token=${token}`;
@@ -29,7 +30,7 @@ exports.checkToken = async () => {
 
 exports.getAllFacebookPages = async () => {
   try {
-    const baseUrl = `${graphAPIUrl}/${busAssetID}/contained_pages?limit=100`;
+    const baseUrl = `${graphAPIUrl}/${bmID}/client_pages?limit=100&fields=name`;
     let allPages = [];
     let nextUrl = baseUrl;
 
@@ -43,42 +44,11 @@ exports.getAllFacebookPages = async () => {
 
       let data = await response.json();
       allPages = allPages.concat(data.data);
-
+      
       nextUrl = data.paging && data.paging.next ? data.paging.next : null;
     }
     while (nextUrl);
 
-    console.log(allPages);
-    console.log(allPages.length);
-    return allPages;
-  } catch (error) {
-    console.error('An error occurred while fetching and storing data:', error);
-    return null;
-  }
-}
-
-exports.getAllInstagramAccounts = async () => {
-  try {
-    const baseUrl = `${graphAPIUrl}/${busAssetID}/contained_instagram_accounts?fields=username,profile_pic&limit=100`;
-    let allPages = [];
-    let nextUrl = baseUrl;
-
-    do {
-      const response = await fetch(nextUrl, {
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-        },
-        muteHttpExceptions: true
-      });
-
-      let data = await response.json();
-      allPages = allPages.concat(data.data);
-
-      nextUrl = data.paging && data.paging.next ? data.paging.next : null;
-    }
-    while (nextUrl);
-
-    console.log(allPages);
     console.log(allPages.length);
     return allPages;
   } catch (error) {
@@ -89,7 +59,7 @@ exports.getAllInstagramAccounts = async () => {
 
 exports.getAllAdsAccount = async () => {
   try {
-    const baseUrl = `${graphAPIUrl}/${busAssetID}/contained_adaccounts?fields=name&limit=100`;
+    const baseUrl = `${graphAPIUrl}/${bmID}/client_ad_accounts?fields=name&limit=100`;
     let allPages = [];
     let nextUrl = baseUrl;
 
@@ -108,7 +78,35 @@ exports.getAllAdsAccount = async () => {
     }
     while (nextUrl);
 
-    console.log(allPages);
+    console.log(allPages.length);
+    return allPages;
+  } catch (error) {
+    console.error('An error occurred while fetching and storing data:', error);
+    return null;
+  }
+}
+
+exports.getAllInstagramAccounts = async () => {
+  try {
+    const baseUrl = `${graphAPIUrl}/${bmID}/instagram_accounts?limit=100&fields=username,profile_pic`;
+    let allPages = [];
+    let nextUrl = baseUrl;
+
+    do {
+      const response = await fetch(nextUrl, {
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+        },
+        muteHttpExceptions: true
+      });
+
+      let data = await response.json();
+      allPages = allPages.concat(data.data);
+
+      nextUrl = data.paging && data.paging.next ? data.paging.next : null;
+    }
+    while (nextUrl);
+
     console.log(allPages.length);
     return allPages;
   } catch (error) {

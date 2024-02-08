@@ -12,6 +12,10 @@ Service.init({
   name: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  apiName: {
+    type: DataTypes.STRING,
+    allowNull: true
   }
 }, {
   sequelize,

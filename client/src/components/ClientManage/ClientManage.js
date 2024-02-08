@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ChooseAccount from '../ChooseAccount/ChooseAccount';
 
 function ClientManage() {
     const [clients, setClients] = useState([]);
@@ -10,6 +11,8 @@ function ClientManage() {
     });
     const [services, setServices] = useState([]);
     const [clientServiceData, setClientServiceData] = useState({});
+    const [activeService, setActiveService] = useState("");
+    const [selectedAccountId, setSelectedAccountId] = useState(null);
 
     useEffect(() => {
         fetchClients();
@@ -28,7 +31,7 @@ function ClientManage() {
         const data = await response.json();
         setServices(data);
     };
-    
+
     const fetchClientServiceData = async () => {
         const response = await fetch('/api/clientservices');
         const data = await response.json();
@@ -65,14 +68,21 @@ function ClientManage() {
         return clientServiceData.find(cs => cs.clientID === clientID && cs.serviceID === serviceID) || { status: 'inactive' };
     };
 
-    const handleStatusChange = (clientID, serviceID, status) => {
+    const handleStatusChange = (clientID, serviceID, status, apiName) => {
         setClientServiceData(prevData => {
             const newData = [...prevData];
-            const clientService = newData.find(cs => cs.clientID === clientID && cs.serviceID === serviceID);
+            let clientService = newData.find(cs => cs.clientID === clientID && cs.serviceID === serviceID);
             if (clientService) {
                 clientService.status = status;
             } else {
-                newData.push({ clientID, serviceID, status });
+                clientService = { clientID, serviceID, status, apiAccountId: null };
+                newData.push(clientService);
+            }
+            if (status === 'active') {
+                setActiveService({ apiName, clientService });
+            } else {
+                setActiveService(null);
+                clientService.apiAccountId = null; // resetuj wybrane ID konta
             }
             return newData;
         });
@@ -80,7 +90,6 @@ function ClientManage() {
 
     const handleSave = async (clientID) => {
         const clientServices = clientServiceData.filter(cs => cs.clientID === clientID);
-        console.log(clientServices);
         for (let clientService of clientServices) {
             if (clientService.clientServiceID) {
                 await fetch(`/api/clientservices/update/${clientService.clientServiceID}`, {
@@ -132,6 +141,12 @@ function ClientManage() {
                 />
                 <button type="submit">Dodaj klienta</button>
             </form>
+
+            {activeService && <ChooseAccount accountType={activeService.apiName} onAccountSelect={(accountId) => {
+                activeService.clientService.apiAccountId = accountId;
+                setActiveService(null);
+            }} />}
+
             <table>
                 <thead>
                     <tr>
@@ -154,17 +169,18 @@ function ClientManage() {
                             <td>{client.contactEmail}</td>
                             <td>{client.phoneNumber}</td>
                             {services.map((service) => {
-                            const clientService = findClientService(client.id, service.serviceID);
-                            return (
-                                <td key={service.serviceID}>
-                                    <select value={clientService.status} onChange={e => handleStatusChange(client.id, service.serviceID, e.target.value)}>
-                                        <option value="active">Aktywny</option>
-                                        <option value="inactive">Nieaktywny</option>
-                                        <option value="suspended">Zawieszony</option>
-                                    </select>
-                                </td>
-                            );
-                        })}
+    const clientService = findClientService(client.id, service.serviceID);
+    return (
+        <td key={service.serviceID}>
+            <select value={clientService.status} onChange={e => handleStatusChange(client.id, service.serviceID, e.target.value, service.apiName)}>
+                <option value="active">Aktywny</option>
+                <option value="inactive">Nieaktywny</option>
+                <option value="suspended">Zawieszony</option>
+            </select>
+            <p>{clientService.apiAccountId}</p>
+        </td>
+    );
+})}
                             <td><button onClick={() => handleSave(client.id)}>Zapisz</button></td>
                             <td><button onClick={() => handleDelete(client.id)}>Usuń</button></td>
                         </tr>

@@ -1,0 +1,26 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Webfont: Angry-Regular */
+@font-face {
+    font-family: 'Angry';
+    src:    url('./fonts/Angry.woff2') format('woff2'), /* Modern Browsers */
+            url('./fonts/Angry.otf') format('opentype'); /* Safari, Android, iOS */
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+
+/* Axiforma */
+@font-face {
+    font-family: 'Axiforma';
+    src: url('./fonts/Axiforma-Regular.eot');
+    src: local('./fonts/Axiforma Regular'), local('./fonts/Axiforma-Regular'),
+        url('./fonts/Axiforma-Regular.eot?#iefix') format('embedded-opentype'),
+        url('./fonts/Axiforma-Regular.woff2') format('woff2'),
+        url('./fonts/Axiforma-Regular.woff') format('woff'),
+        url('./fonts/Axiforma-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
