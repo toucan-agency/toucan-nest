@@ -15,6 +15,7 @@ function ClientManage() {
     const [selectedAccountId, setSelectedAccountId] = useState(null);
 
     useEffect(() => {
+        document.title = 'Toucan Nest 1.0 | Zarządzanie klientami';
         fetchClients();
         fetchServices();
         fetchClientServiceData();
@@ -75,14 +76,14 @@ function ClientManage() {
             if (clientService) {
                 clientService.status = status;
             } else {
-                clientService = { clientID, serviceID, status, apiAccountId: null };
+                clientService = { clientID, serviceID, status, apiAccountID: null };
                 newData.push(clientService);
             }
             if (status === 'active') {
                 setActiveService({ apiName, clientService });
             } else {
                 setActiveService(null);
-                clientService.apiAccountId = null; // resetuj wybrane ID konta
+                clientService.apiAccountID = null; // resetuj wybrane ID konta
             }
             return newData;
         });
@@ -92,12 +93,14 @@ function ClientManage() {
         const clientServices = clientServiceData.filter(cs => cs.clientID === clientID);
         for (let clientService of clientServices) {
             if (clientService.clientServiceID) {
+                console.log(clientService);
                 await fetch(`/api/clientservices/update/${clientService.clientServiceID}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(clientService),
                 });
             } else {
+                console.log(clientService);
                 await fetch('/api/clientservices/create', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -143,7 +146,7 @@ function ClientManage() {
             </form>
 
             {activeService && <ChooseAccount accountType={activeService.apiName} onAccountSelect={(accountId) => {
-                activeService.clientService.apiAccountId = accountId;
+                activeService.clientService.apiAccountID = accountId;
                 setActiveService(null);
             }} />}
 
@@ -165,7 +168,7 @@ function ClientManage() {
                     {clients.map((client) => (
                         <tr key={client.id}>
                             <td>{client.SKU}</td>
-                            <td>{client.companyName}</td>
+                            <td><a href={`/raport-sm/${client.SKU}`}>{client.companyName}</a></td>
                             <td>{client.contactEmail}</td>
                             <td>{client.phoneNumber}</td>
                             {services.map((service) => {
@@ -177,7 +180,7 @@ function ClientManage() {
                 <option value="inactive">Nieaktywny</option>
                 <option value="suspended">Zawieszony</option>
             </select>
-            <p>{clientService.apiAccountId}</p>
+            <p>{clientService.apiAccountID}</p>
         </td>
     );
 })}

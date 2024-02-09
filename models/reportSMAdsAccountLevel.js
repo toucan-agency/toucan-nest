@@ -2,34 +2,38 @@ const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const Client = require('./client');
 
-class ReportSMAccountLevel extends Model { }
+class ReportSMAdsAccountLevel extends Model { }
 
-ReportSMAccountLevel.init({
+ReportSMAdsAccountLevel.init({
     reportAccountLevelID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    clientID: {
+    clientId: {
         type: DataTypes.INTEGER,
         references: {
             model: Client,
             key: 'id'
         }
     },
-    reportID: {
-        type: DataTypes.INTEGER,
+    accountID: {
+        type: DataTypes.STRING,
         allowNull: false
     },
-    accountID: {
+    reach: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     impressions: {
         type: DataTypes.INTEGER,
         allowNull: true
     },
     clicks: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    linkClicks: {
         type: DataTypes.INTEGER,
         allowNull: true
     },
@@ -49,8 +53,32 @@ ReportSMAccountLevel.init({
         type: DataTypes.INTEGER,
         allowNull: true
     },
+    ctr: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true
+    },
     spend: {
         type: DataTypes.DECIMAL(10, 2),
+        allowNull: true
+    },
+    frequency: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true
+    },
+    video_p25_watched_actions: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    video_p50_watched_actions: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    video_p75_watched_actions: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    video_p100_watched_actions: {
+        type: DataTypes.INTEGER,
         allowNull: true
     },
     dateRangeStart: {
@@ -63,10 +91,10 @@ ReportSMAccountLevel.init({
     }
 }, {
     sequelize,
-    modelName: 'ReportAccountLevel'
+    modelName: 'ReportSMAdsAccountLevel'
 });
 
-Client.hasMany(ReportSMAccountLevel, { foreignKey: 'clientId' });
-ReportSMAccountLevel.belongsTo(Client, { foreignKey: 'clientId' });
+Client.hasMany(ReportSMAdsAccountLevel, { foreignKey: 'clientId' });
+ReportSMAdsAccountLevel.belongsTo(Client, { foreignKey: 'clientId' });
 
-module.exports = ReportSMAccountLevel;    
+module.exports = ReportSMAdsAccountLevel;    

@@ -40,6 +40,7 @@ function ChooseAccount({ accountType, onAccountSelect }) {
                     ))}
                 </fieldset>
                 <button type="button" onClick={handleSave}>Zapisz</button>
+                <button type="button" onClick={() => onAccountSelect(null)}>Anuluj</button>
             </form>
         </>
     );

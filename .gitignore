@@ -27,3 +27,4 @@ createAdminUser.js
 
 build
 .env
+testNodeAdmin.js

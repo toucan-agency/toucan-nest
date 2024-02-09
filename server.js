@@ -16,15 +16,20 @@ const clientRoutes = require('./routes/clientRoutes');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const clientServiceRoutes = require('./routes/clientServiceRoutes');
-const authRoutes = require('./routes/authRoutes');
 const metaAPIRoutes = require('./routes/metaAPIRoutes');
+const fieldNamesRoutes = require('./routes/fieldNamesRoutes');
+const monthlySummaryRoutes = require('./routes/monthlySummaryRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 app.use('/api/clients', clientRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/clientservices', clientServiceRoutes);
 app.use('/api/meta_api', metaAPIRoutes);
-app.use('/api', authRoutes); // Użyj routerów autentykacji
+app.use('/api/fieldnames', fieldNamesRoutes);
+app.use('/api/monthly_summaries', monthlySummaryRoutes);
+app.use('/api', authRoutes);
+
 
 // Test SQL connection
 sequelize.authenticate()
@@ -36,10 +41,13 @@ const User = require('./models/user');
 const Client = require('./models/client');
 const Service = require('./models/service');
 const ClientService = require('./models/clientservice');
+const ReportSMAdsAccountLevel = require('./models/reportSMAdsAccountLevel');
+const ReportSMAdsPostLevel = require('./models/reportSMAdsPostLevel');
+const FiledNames = require('./models/filedNames');
 
 // Sequelize models synchronization  
 sequelize.sync(
-   //{ alter: true } // Użyj tego parametru, aby nie tracić danych
+     { alter: true } // Użyj tego parametru, aby nie tracić danych
 )
   .then(() => console.log("Tables have been created or updated."))
   .catch(err => console.error('Failed to synchronize database tables:', err));

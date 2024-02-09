@@ -7,6 +7,6 @@ router.get('/client/:clientID/:serviceID', clientServiceController.getClientServ
 router.post('/create', clientServiceController.createClientService);
 router.put('/update/:clientServiceID', clientServiceController.updateClientService);
 router.delete('/delete/:clientID', clientServiceController.deleteClientService);
-
+router.get('/clients_with_service/:serviceID', clientServiceController.findAllClientNamesByServiceId);
 
 module.exports = router;

@@ -11,14 +11,21 @@ if (process.env.NODE_ENV === 'production') {
     // host: process.env.DB_HOST,
     dialect: 'mysql',
     dialectOptions: {
-      socketPath: util.format('/cloudsql/%s', process.env.DB_SOCKET_PATH)
+      socketPath: util.format('/cloudsql/%s', process.env.DB_SOCKET_PATH),
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci',
     },
     pool: {
       max: 5,
       min: 0,
       acquire: 30000,
       idle: 10000
-    }
+    },
+    define: {
+      timestamps: false,
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci',
+    },
   });
 } else {
   // Połączenie za pomocą standardowego połączenia TCP w środowisku lokalnym
@@ -30,7 +37,12 @@ if (process.env.NODE_ENV === 'production') {
       min: 0,
       acquire: 30000,
       idle: 10000
-    }
+    },
+    define: {
+      timestamps: false,
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci',
+    },
   });
 }
 

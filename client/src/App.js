@@ -9,6 +9,7 @@ import CreateUser from './components/CreateUser/CreateUser';
 import ManageService from './components/ManageService/ManageService';
 import ClientManage from './components/ClientManage/ClientManage';
 import ClientPanelSM from './components/ClientPanelSM/ClientPanelSM';
+import AddMonthlySummary from "./components/AddMonthlySummary/AddMonthlySummary";
 
 function App() {
   const { currentUser } = useAuth();
@@ -21,7 +22,8 @@ function App() {
         <Route path="/create-user" element={currentUser && currentUser.role === 'admin' ? <CreateUser /> : <Navigate to="/" />} />
         <Route path="/manage-services" element={currentUser && currentUser.role === 'admin' ? <ManageService /> : <Navigate to="/" />} />
         <Route path="/client-manage" element={currentUser && currentUser.role === 'admin' ? <ClientManage /> : <Navigate to="/" />} />
-        <Route path="/raport-sm/:sku" element={currentUser ? <ClientPanelSM /> : <Navigate to="/" />} />
+        <Route path="/add-monthly-summary" element={currentUser && currentUser.role === 'admin' ? <AddMonthlySummary /> : <Navigate to="/" />} />
+        <Route path="/raport-sm/:sku" element={<ClientPanelSM />} />
       </Routes>
     </Router>
   );
