@@ -111,6 +111,39 @@ function ClientManage() {
         fetchClientServiceData();
     };
 
+    const refreshClientServicesData = async (clientID, accountID, since, until, pageId) => {
+        // Wywołaj pierwsze zapytanie do API
+        await fetch('/api/meta_api/reportSMAdsAccountLevel', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                accountID: accountID,
+                clientId: clientID,
+                since: since,
+                until: until
+            }),
+        });
+
+        // Wywołaj drugie zapytanie do API
+        await fetch('/api/meta_api/reportSMAdsPostLevel', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                clientId: clientID,
+                pageId: pageId,
+                since: since,
+                until: until
+            }),
+        });
+
+        console.log('Odświeżono dane klienta');
+    };
+
+    const getApiAccountId = (clientID, serviceID) => {
+        const clientService = clientServiceData.find(cs => cs.clientID === clientID && cs.serviceID === serviceID);
+        return clientService ? clientService.apiAccountID : null;
+    };
+
     return (
         <div>
             <h2>Zarządzanie klientami</h2>
@@ -172,20 +205,21 @@ function ClientManage() {
                             <td>{client.contactEmail}</td>
                             <td>{client.phoneNumber}</td>
                             {services.map((service) => {
-    const clientService = findClientService(client.id, service.serviceID);
-    return (
-        <td key={service.serviceID}>
-            <select value={clientService.status} onChange={e => handleStatusChange(client.id, service.serviceID, e.target.value, service.apiName)}>
-                <option value="active">Aktywny</option>
-                <option value="inactive">Nieaktywny</option>
-                <option value="suspended">Zawieszony</option>
-            </select>
-            <p>{clientService.apiAccountID}</p>
-        </td>
-    );
-})}
+                                const clientService = findClientService(client.id, service.serviceID);
+                                return (
+                                    <td key={service.serviceID}>
+                                        <select value={clientService.status} onChange={e => handleStatusChange(client.id, service.serviceID, e.target.value, service.apiName)}>
+                                            <option value="active">Aktywny</option>
+                                            <option value="inactive">Nieaktywny</option>
+                                            <option value="suspended">Zawieszony</option>
+                                        </select>
+                                        <p>{clientService.apiAccountID}</p>
+                                    </td>
+                                );
+                            })}
                             <td><button onClick={() => handleSave(client.id)}>Zapisz</button></td>
                             <td><button onClick={() => handleDelete(client.id)}>Usuń</button></td>
+                            <td><button onClick={() => refreshClientServicesData(client.id, getApiAccountId(client.id, 10), '2024-01-01', '2024-01-31', getApiAccountId(client.id, 7))}>Odśwież</button></td>
                         </tr>
                     ))}
                 </tbody>

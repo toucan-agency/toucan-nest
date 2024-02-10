@@ -7,7 +7,7 @@ function ClientPanelSM() {
     const [services, setServices] = useState([]);
     const [clientServiceData, setClientServiceData] = useState([]);
     const [clientService, setClientService] = useState({});
-    const [raportSMAdsAccountLevel, setRaportSMAdsAccountLevel] = useState(null)
+    const [raportSMAdsAccountLevel, setRaportSMAdsAccountLevel] = useState(null);
     const [fieldNames, setFieldNames] = useState([]);
     const [facebookPosts, setFacebookPosts] = useState(null);
 
@@ -43,25 +43,9 @@ function ClientPanelSM() {
         setFieldNames(data);
     };
 
-    const findRaportSMAdsAccountLevel = async (clientId, since) => {
-        try {
-            const response = await fetch(`/api/meta_api/getReportSMAdsAccountLevelFromDB/${clientId}/${since}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            console.log(data);
-            setRaportSMAdsAccountLevel(data);
-        } catch (error) {
-            console.error('A problem occurred while fetching the client data:', error);
-        }
-    }
-
     const fetchFacebookPosts = async (clientId) => {
         // Znajdź usługę o id 7 dla tego klienta
         const service = clientServiceData.find(cs => cs.clientID === clientId && cs.serviceID === 7);
-        console.log("clientServiceData");
-        console.log(service);
 
         // Jeśli usługa nie istnieje lub nie jest aktywna, nie rób nic
         if (!service || service.status !== 'active') {
@@ -92,6 +76,20 @@ function ClientPanelSM() {
     )).toISOString().split('T')[0];
 
     const raportSMPostLevel = clientServiceData.find(cs => cs.clientID === clientData.id && cs.serviceID === 7);
+
+    const findRaportSMAdsAccountLevel = async (clientId, since) => {
+        try {
+            const response = await fetch(`/api/meta_api/getReportSMAdsAccountLevelFromDB/${clientId}/${since}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log(data);
+            setRaportSMAdsAccountLevel(data);
+        } catch (error) {
+            console.error('A problem occurred while fetching the client data:', error);
+        }
+    }
 
     useEffect(() => {
         if (clientData) {
@@ -140,16 +138,14 @@ function ClientPanelSM() {
         }
     }, [clientData, clientServiceData]);
 
-
-
-    // Jeśli SKU nie jest zdefiniowane, przekieruj użytkownika
-    if (!sku) {
-        return <Navigate to="/" />;
-    }
-
-    if (!clientData || !services.length || !clientServiceData.length) {
-        return <div>Loading...</div>;
-    }
+            // Jeśli SKU nie jest zdefiniowane, przekieruj użytkownika
+            if (!sku) {
+                return <Navigate to="/" />;
+            }
+        
+            if (!clientData || !services.length || !clientServiceData.length) {
+                return <div>Loading...</div>;
+            }
 
     return (
         <div className="flex flex-col space-y-4">
@@ -166,7 +162,7 @@ function ClientPanelSM() {
 
             {raportSMPostLevel && raportSMPostLevel.status === 'active' && (
                 <section className="p-4 bg-white shadow lg:max-w-screen-lg w-full mx-auto">
-                    <h2 className="font-bold text-lg">Informacje o postach</h2>
+                    <h2 className="font-bold text-lg">Informacje o postach na Facebooku</h2>
                     {facebookPosts ? (
                         <table className="table-auto w-full">
                             <thead>
@@ -192,7 +188,9 @@ function ClientPanelSM() {
                                     <tr key={index}>
                                         <td className="border px-4 py-2">
                                             {post.postImageUrl && (
-                                                <img src={post.postImageUrl} alt="Post" className="w-20 h-20 object-cover" />
+                                                <a href={post.permalinkUrl} target="_blank" rel="noreferrer">
+                                                    <img src={post.postImageUrl} alt="Post" className="w-20 h-20 object-cover" />
+                                                </a>
                                             )}
                                         </td>
                                         {Object.entries(post).map(([key, value], index) => {
@@ -240,8 +238,8 @@ function ClientPanelSM() {
                         ))}
                     </ul>
                 </section>
-            )}        
-            </div>
+            )}
+        </div>
     );
 }
 

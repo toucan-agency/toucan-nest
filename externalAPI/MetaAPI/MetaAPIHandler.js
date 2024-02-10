@@ -117,8 +117,15 @@ exports.getAllInstagramAccounts = async () => {
 
 exports.getReportSMAdsAccountLevel = async (accountID, since, until) => {
   try {
-    const baseUrl = `${graphAPIUrl}/${accountID}/insights?fields=reach,impressions,actions,cost_per_action_type,clicks,video_p25_watched_actions,spend,video_p50_watched_actions,video_p75_watched_actions,video_p100_watched_actions,ctr,account_id,frequency&time_ranges=[{"since":"${since}","until":"${until}"}]&level=account&limit=100`;
-    console.log(baseUrl);
+    const filters = [
+      {
+        field: 'campaign.name',
+        operator: 'CONTAIN',
+        value: '[TA][SMS]'
+      }
+    ];
+
+    const baseUrl = `${graphAPIUrl}/${accountID}/insights?fields=reach,impressions,actions,cost_per_action_type,clicks,video_p25_watched_actions,spend,video_p50_watched_actions,video_p75_watched_actions,video_p100_watched_actions,ctr,account_id,frequency&time_ranges=[{"since":"${since}","until":"${until}"}]&level=account&limit=100&filtering=${encodeURIComponent(JSON.stringify(filters))}`;    console.log(baseUrl);
     let allPages = [];
     let nextUrl = baseUrl;
 

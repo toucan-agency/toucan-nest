@@ -2,6 +2,7 @@ const MetaAPIHandler = require('../externalAPI/MetaAPI/MetaAPIHandler');
 const { findActionValue, findCostPerActionValue, findPostInsightsDataValue, findPostActionDataSummaryTotalCount, replaceInvalidUTF8Characters } = require('./dataProcessing');
 const ReportSMAdsAccountLevel = require('../models/reportSMAdsAccountLevel');
 const ReportSMAdsPostLevel = require('../models/reportSMAdsPostLevel');
+const { Op } = require('sequelize');
 
 exports.getAllInstagramAccounts = async (req, res) => {
     try {
@@ -56,7 +57,15 @@ exports.getReportSMAdsAccountLevel = async (req, res) => {
         video_p75_watched_actions: findActionValue(page, "video_75p_watched_actions"),
         video_p100_watched_actions: findActionValue(page, "video_100p_watched_actions"),
       }));
-  
+
+      await ReportSMAdsAccountLevel.destroy({
+        where: {
+          clientId: clientId,
+          accountID: accountID.substring(4),
+          dateRangeStart: since
+        }
+      });
+
       await ReportSMAdsAccountLevel.bulkCreate(processedData);
   
       res.status(200).json({ message: 'Data processed and saved successfully' });
@@ -107,6 +116,13 @@ exports.getFAllFacebookPagePosts = async (req, res) => {
         }));
 
         //console.log(processData);
+        await ReportSMAdsPostLevel.destroy({
+            where: {
+              clientId: clientId,
+              pageId: pageId.substring(4),
+              dateRangeStart: since
+            }
+          });
 
         await ReportSMAdsPostLevel.bulkCreate(processData);
         res.status(200).json({ message: 'Data processed and saved successfully' });

@@ -22,13 +22,6 @@ function AddMonthlySummary() {
       setClients(data);
     }
   };
-
-  /* 
-0 {clientServiceID: 19, clientID: 5, serviceID: 9, apiAccountID: null, startDate: "2024-02-09", status: "active"}
-1 {clientServiceID: 23, clientID: 6, serviceID: 9, apiAccountID: null, startDate: "2024-02-09", status: "active"}
-2 {clientServiceID: 25, clientID: 8, serviceID: 9, apiAccountID: null, startDate: "2024-02-09", status: "active"}
-
-  */
   
   useEffect(() => {
     fetchClients();

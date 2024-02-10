@@ -47,7 +47,7 @@ const FiledNames = require('./models/filedNames');
 
 // Sequelize models synchronization  
 sequelize.sync(
-     { alter: true } // Użyj tego parametru, aby nie tracić danych
+      // { alter: true } // Użyj tego parametru, aby nie tracić danych
 )
   .then(() => console.log("Tables have been created or updated."))
   .catch(err => console.error('Failed to synchronize database tables:', err));
