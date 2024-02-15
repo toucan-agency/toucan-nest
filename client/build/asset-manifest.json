@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/static/css/main.551ef195.css",
+    "main.js": "/static/js/main.c772f7a9.js",
+    "static/media/Axiforma-Regular.eot": "/static/media/Axiforma-Regular.b11f3c9eb2be1e464c02.eot",
+    "static/media/Axiforma-Regular.ttf": "/static/media/Axiforma-Regular.c4f8a961a15e460f3a71.ttf",
+    "static/media/Axiforma-Regular.woff": "/static/media/Axiforma-Regular.2b258adf3be92e4cc1ad.woff",
+    "static/media/Axiforma-Regular.woff2": "/static/media/Axiforma-Regular.7f1cf476b4119c8b770e.woff2",
+    "static/media/Angry.otf": "/static/media/Angry.0e57df0831f5480f17b6.otf",
+    "static/media/Angry.woff2": "/static/media/Angry.2781033d6ffd9653ac45.woff2",
+    "index.html": "/index.html",
+    "main.551ef195.css.map": "/static/css/main.551ef195.css.map",
+    "main.c772f7a9.js.map": "/static/js/main.c772f7a9.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.551ef195.css",
+    "static/js/main.c772f7a9.js"
+  ]
+}

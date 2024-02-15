@@ -3,15 +3,20 @@ const express = require('express');
 const path = require('path');
 require('dotenv').config();
 const app = express();
+const API_URL = process.env.REACT_APP_API_URL;
 
 // Middleware JSON parse
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// CORS middleware
+const cors = require('cors');
+app.use(cors());
+
 // Import database settings config
 const sequelize = require('./config/database');
 
-// Import routers 
+// Import routers test
 const clientRoutes = require('./routes/clientRoutes');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');

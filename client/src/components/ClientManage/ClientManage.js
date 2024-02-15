@@ -145,15 +145,16 @@ function ClientManage() {
     };
 
     return (
-        <div>
-            <h2>Zarządzanie klientami</h2>
-            <form onSubmit={handleSubmit}>
+        <div className="p-4">
+            <h2 className="text-2xl font-bold mb-4">Zarządzanie klientami</h2>
+            <form onSubmit={handleSubmit} className="mb-4">
                 <input
                     type="text"
                     value={clientData.SKU}
                     onChange={(e) => setClientData({ ...clientData, SKU: e.target.value })}
                     placeholder="SKU"
                     required
+                    className="border p-2 mb-2 w-full"
                 />
                 <input
                     type="text"
@@ -161,6 +162,7 @@ function ClientManage() {
                     onChange={(e) => setClientData({ ...clientData, companyName: e.target.value })}
                     placeholder="Nazwa firmy"
                     required
+                    className="border p-2 mb-2 w-full"
                 />
                 <input
                     type="email"
@@ -168,14 +170,16 @@ function ClientManage() {
                     onChange={(e) => setClientData({ ...clientData, contactEmail: e.target.value })}
                     placeholder="Email"
                     required
+                    className="border p-2 mb-2 w-full"
                 />
                 <input
                     type="text"
                     value={clientData.phoneNumber}
                     onChange={(e) => setClientData({ ...clientData, phoneNumber: e.target.value })}
                     placeholder="Numer telefonu"
+                    className="border p-2 mb-2 w-full"
                 />
-                <button type="submit">Dodaj klienta</button>
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Dodaj klienta</button>
             </form>
 
             {activeService && <ChooseAccount accountType={activeService.apiName} onAccountSelect={(accountId) => {
@@ -183,32 +187,32 @@ function ClientManage() {
                 setActiveService(null);
             }} />}
 
-            <table>
+            <table className="table-auto w-full mb-4">
                 <thead>
                     <tr>
-                        <th>SKU</th>
-                        <th>Nazwa firmy</th>
-                        <th>Email</th>
-                        <th>Numer telefonu</th>
+                        <th className="border px-4 py-2">SKU</th>
+                        <th className="border px-4 py-2">Nazwa firmy</th>
+                        <th className="border px-4 py-2">Email</th>
+                        <th className="border px-4 py-2">Numer telefonu</th>
                         {services.map((service) => (
-                            <th key={service.serviceID}>{service.name}</th>
+                            <th key={service.serviceID} className="border px-4 py-2">{service.name}</th>
                         ))}
-                        <th>Zapisz Usługi</th>
-                        <th>Usuń</th>
+                        <th className="border px-4 py-2">Zapisz Usługi</th>
+                        <th className="border px-4 py-2">Usuń</th>
                     </tr>
                 </thead>
                 <tbody>
                     {clients.map((client) => (
                         <tr key={client.id}>
-                            <td>{client.SKU}</td>
-                            <td><a href={`/raport-sm/${client.SKU}`}>{client.companyName}</a></td>
-                            <td>{client.contactEmail}</td>
-                            <td>{client.phoneNumber}</td>
+                            <td className="border px-4 py-2">{client.SKU}</td>
+                            <td className="border px-4 py-2"><a href={`/raport-sm/${client.SKU}`}>{client.companyName}</a></td>
+                            <td className="border px-4 py-2">{client.contactEmail}</td>
+                            <td className="border px-4 py-2">{client.phoneNumber}</td>
                             {services.map((service) => {
                                 const clientService = findClientService(client.id, service.serviceID);
                                 return (
-                                    <td key={service.serviceID}>
-                                        <select value={clientService.status} onChange={e => handleStatusChange(client.id, service.serviceID, e.target.value, service.apiName)}>
+                                    <td key={service.serviceID} className="border px-4 py-2">
+                                        <select value={clientService.status} onChange={e => handleStatusChange(client.id, service.serviceID, e.target.value, service.apiName)} className="border p-2 mb-2 w-full">
                                             <option value="active">Aktywny</option>
                                             <option value="inactive">Nieaktywny</option>
                                             <option value="suspended">Zawieszony</option>
@@ -217,9 +221,9 @@ function ClientManage() {
                                     </td>
                                 );
                             })}
-                            <td><button onClick={() => handleSave(client.id)}>Zapisz</button></td>
-                            <td><button onClick={() => handleDelete(client.id)}>Usuń</button></td>
-                            <td><button onClick={() => refreshClientServicesData(client.id, getApiAccountId(client.id, 10), '2024-01-01', '2024-01-31', getApiAccountId(client.id, 7))}>Odśwież</button></td>
+                            <td className="border px-4 py-2"><button onClick={() => handleSave(client.id)} className="bg-blue-500 text-white px-4 py-2 rounded">Zapisz</button></td>
+                            <td className="border px-4 py-2"><button onClick={() => handleDelete(client.id)} className="bg-red-500 text-white px-4 py-2 rounded">Usuń</button></td>
+                            <td className="border px-4 py-2"><button onClick={() => refreshClientServicesData(client.id, getApiAccountId(client.id, 10), '2024-01-01', '2024-01-31', getApiAccountId(client.id, 7))} className="bg-green-500 text-white px-4 py-2 rounded">Odśwież</button></td>
                         </tr>
                     ))}
                 </tbody>
